@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Елизавета Озерова](https://up.htmlacademy.ru/javascript/6/user/172908).
-* Наставник: `Евгений Щепотьев`.
+* Наставник: [Евгений Щепотьев](https://htmlacademy.ru/profile/id125753).
 
 ---
 
