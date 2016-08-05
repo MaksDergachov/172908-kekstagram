@@ -6,22 +6,21 @@ function getMessage(a, b) {
   }
 
   if (typeof a === 'number') {
-    return('Переданное SVG-изображение содержит ' + a + ' объектов и ' + (b * 4) + ' атрибутов');
+    return 'Переданное SVG-изображение содержит ' + a + ' объектов и ' + (b * 4) + ' атрибутов';
   }
 
-  if (Array.isArray(a)) {
-    if (!Array.isArray(b)) {
+  if (Array.isArray(a) && !Array.isArray(b)) {
       var amountOfRedPoints = 0;
       for (var i = 0; i < a.length; i++) {
         amountOfRedPoints += a[i];
       };
-      return('Количество красных точек во всех строчках изображения: ' + amountOfRedPoints);
+      return 'Количество красных точек во всех строчках изображения: ' + amountOfRedPoints;
     } else {
       var artifactsSquare = 0;
       for (var j = 0; j < a.length; j++) {
         artifactsSquare += a[j] * b[j];
       };
-      return('Общая площадь артефактов сжатия: ' + artifactsSquare + ' пикселей');
+      return 'Общая площадь артефактов сжатия: ' + artifactsSquare + ' пикселей';
     };
 
   }
