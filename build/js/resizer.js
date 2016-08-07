@@ -113,11 +113,26 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
+      var cropRectangleX = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
+      var cropRectangleY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
+      var cropRectangleSide = this._resizeConstraint.side - this._ctx.lineWidth / 2;
+
       this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+          cropRectangleX,
+          cropRectangleY,
+          cropRectangleSide,
+          cropRectangleSide);
+
+      var transparentSquareX = cropRectangleX - this._ctx.lineWidth;
+      var transparentSquareY = cropRectangleY - this._ctx.lineWidth;
+      var transparentSquareSide = (this._resizeConstraint.side - this._ctx.lineWidth / 2) / 2;
+
+      this._ctx.beginPath();
+      this._ctx.moveTo(transparentSquareX, transparentSquareY);
+      this._ctx.lineTo(transparentSquareSide, transparentSquareY);
+      this._ctx.lineTo(transparentSquareSide, transparentSquareSide);
+      this._ctx.lineTo(transparentSquareX, transparentSquareSide);
+      this._ctx.lineTo(transparentSquareX, transparentSquareY);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -125,6 +140,27 @@
       // 0 0 находится в левом верхнем углу холста, в противном случае
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
+      this._ctx.restore();
+
+      this._ctx.moveTo(0, 0);
+      this._ctx.lineTo(this._container.width, 0);
+      this._ctx.lineTo(this._container.width, this._container.height);
+      this._ctx.lineTo(0, this._container.height);
+      this._ctx.lineTo(0, 0);
+
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+      this._ctx.fill('evenodd');
+      this._ctx.closePath();
+      this._ctx.restore();
+      this._ctx.save();
+
+      this._ctx.translate(this._container.width / 2, this._container.height / 2);
+
+      var fotoSizeString = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
+      this._ctx.fillStyle = '#ffffff';
+      this._ctx.font = '16px Arial';
+      this._ctx.fillText(fotoSizeString, transparentSquareX / 2, transparentSquareY);
+
       this._ctx.restore();
     },
 
