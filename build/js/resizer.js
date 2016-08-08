@@ -123,8 +123,8 @@
           cropRectangleSide,
           cropRectangleSide);
 
-      var transparentSquareX = cropRectangleX - this._ctx.lineWidth;
-      var transparentSquareY = cropRectangleY - this._ctx.lineWidth;
+      var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
+      var transparentSquareY = cropRectangleY - this._ctx.lineWidth / 2;
       var transparentSquareSide = (this._resizeConstraint.side - this._ctx.lineWidth / 2) / 2;
 
       this._ctx.beginPath();
@@ -134,7 +134,7 @@
       this._ctx.lineTo(transparentSquareX, transparentSquareSide);
       this._ctx.lineTo(transparentSquareX, transparentSquareY);
 
-      this._ctx.moveTo(-this._container.width / 2, -this._container.height / 2);
+      this._ctx.moveTo(-this._ctx.lineWidth / 2, -this._container.height / 2);
       this._ctx.lineTo(this._container.width, -this._container.height / 2);
       this._ctx.lineTo(this._container.width, this._container.height);
       this._ctx.lineTo(-this._container.width / 2, this._container.height);
