@@ -89,17 +89,17 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      // this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 3;
       // Цвет обводки.
       this._ctx.fillStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
       // расстояние между соседними штрихами.
-      // this._ctx.setLineDash([15, 10]);
+      //this._ctx.setLineDash([15, 10]);
       // Смещение первого штриха от начала линии.
-      // this._ctx.lineDashOffset = 7;
+      //this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
-      // this._ctx.save();
+      this._ctx.save();
 
       // Установка начальной точки системы координат в центр холста.
       this._ctx.translate(this._container.width / 2, this._container.height / 2);
@@ -117,50 +117,40 @@
       var cropRectangleY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var cropRectangleSide = this._resizeConstraint.side - this._ctx.lineWidth / 2;
 
-      var pointRadius = 4;
+      var pointRadius = this._ctx.lineWidth;
       var pointSize = pointRadius * 2;
-      var counterX = 0;
-      var counterY = 0;
       var pointX = cropRectangleX + pointRadius;
       var pointY = cropRectangleY + pointRadius;
 
-      while (counterY < cropRectangleSide / 2) {
-        while (counterX < cropRectangleSide / 2) {
-          this._ctx.beginPath();
-          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
-          this._ctx.fill();
-          counterX += pointSize;
+      for (var i = 0; i < cropRectangleSide / 2; i + pointSize) {
+        for (var j = 0; j < cropRectangleSide / 2; j + pointSize) {
+          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
           pointX += pointSize * 2;
         }
-        this._ctx.beginPath();
-        this._ctx.arc(pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
-        this._ctx.fill();
-        counterY += pointSize;
+        drawPoint(this._ctx, pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
         pointY += pointSize * 2;
       }
 
-      counterX = 0;
-      counterY = 0;
       pointX = cropRectangleX + pointRadius;
       pointY = cropRectangleY + pointRadius;
 
-      while (counterX < cropRectangleSide / 2) {
-        while (counterY < cropRectangleSide / 2) {
-          this._ctx.beginPath();
-          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
-          this._ctx.fill();
-          counterY += pointSize;
+      for (var c = 0; c < cropRectangleSide / 2; c + pointSize) {
+        for (var k = 0; k < cropRectangleSide / 2; k + pointSize) {
+          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
           pointY += pointSize * 2;
         }
-        this._ctx.beginPath();
-        this._ctx.arc(pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
-        this._ctx.fill();
-        counterX += pointSize;
+        drawPoint(this._ctx, pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
         pointX += pointSize * 2;
       }
 
-      var transparentSquareX = cropRectangleX - pointRadius / 2;
-      var transparentSquareY = cropRectangleY - pointRadius / 2;
+      var drawPoint = function(ctx, x, y, radius, startAngle, endAngle, clockwise) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, clockwise);
+        ctx.fill();
+      };
+
+      var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
+      var transparentSquareY = cropRectangleY - this._ctx.lineWidth / 2;
       var transparentSquareSide = cropRectangleSide / 2;
 
       this._ctx.beginPath();
@@ -170,7 +160,7 @@
       this._ctx.lineTo(transparentSquareX, transparentSquareSide);
       this._ctx.lineTo(transparentSquareX, transparentSquareY);
 
-      this._ctx.moveTo(-pointRadius / 2, -this._container.height / 2);
+      this._ctx.moveTo(-this._ctx.lineWidth / 2, -this._container.height / 2);
       this._ctx.lineTo(this._container.width, -this._container.height / 2);
       this._ctx.lineTo(this._container.width, this._container.height);
       this._ctx.lineTo(-this._container.width / 2, this._container.height);
@@ -183,7 +173,7 @@
       var fotoSizeString = this._image.naturalWidth + ' x ' + this._image.naturalHeight;
       this._ctx.fillStyle = '#ffffff';
       this._ctx.font = '16px Arial';
-      this._ctx.fillText(fotoSizeString, -this._ctx.measureText(fotoSizeString).width / 2, transparentSquareY - pointRadius * 2);
+      this._ctx.fillText(fotoSizeString, -this._ctx.measureText(fotoSizeString).width / 2, transparentSquareY - this._ctx.lineWidth);
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
