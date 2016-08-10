@@ -117,47 +117,35 @@
       var cropRectangleY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var cropRectangleSide = this._resizeConstraint.side - this._ctx.lineWidth / 2;
 
+
       var pointRadius = this._ctx.lineWidth;
-      var pointSize = pointRadius * 2;
-      var counterX = 0;
-      var counterY = 0;
-      var pointX = cropRectangleX + pointRadius;
-      var pointY = cropRectangleY + pointRadius;
+      var ctx = this._ctx;
 
-      while (counterY < cropRectangleSide / 2) {
-        while (counterX < cropRectangleSide / 2) {
-          this._ctx.beginPath();
-          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
-          this._ctx.fill();
-          counterX += pointSize;
-          pointX += pointSize * 2;
+      var drawPoint = function(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, pointRadius, 0, 360, false);
+        ctx.fill();
+      };
+
+      var drawDottedLine = function(startX, startY, side, horizontal) {
+        var DottedLineStart = horizontal ? startX : startY;
+        for(var i = DottedLineStart; i < DottedLineStart + side; i += pointRadius * 4) {
+          if (horizontal) {
+            drawPoint(i, startY);
+          } else {
+            drawPoint(startX, i);
+          }
         }
-        this._ctx.beginPath();
-        this._ctx.arc(pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
-        this._ctx.fill();
-        counterY += pointSize;
-        pointY += pointSize * 2;
-      }
+      };
 
-      counterX = 0;
-      counterY = 0;
-      pointX = cropRectangleX + pointRadius;
-      pointY = cropRectangleY + pointRadius;
+      var drawDottedSquare = function(x, y, side) {
+        drawDottedLine(x + pointRadius, y + pointRadius, side, true);
+        drawDottedLine(x + pointRadius, y + side - pointRadius / 2, side, true);
+        drawDottedLine(x + pointRadius, y + pointRadius, side, false);
+        drawDottedLine(x + side - pointRadius / 2, y + pointRadius, side, false);
+      };
 
-      while (counterX < cropRectangleSide / 2) {
-        while (counterY < cropRectangleSide / 2) {
-          this._ctx.beginPath();
-          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
-          this._ctx.fill();
-          counterY += pointSize;
-          pointY += pointSize * 2;
-        }
-        this._ctx.beginPath();
-        this._ctx.arc(pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
-        this._ctx.fill();
-        counterX += pointSize;
-        pointX += pointSize * 2;
-      }
+      drawDottedSquare(cropRectangleX, cropRectangleY, cropRectangleSide);
 
 
       var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
