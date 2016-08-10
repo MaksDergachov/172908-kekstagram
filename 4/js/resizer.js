@@ -117,37 +117,35 @@
       var cropRectangleY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var cropRectangleSide = this._resizeConstraint.side - this._ctx.lineWidth / 2;
 
-      var pointRadius = this._ctx.lineWidth;
-      var pointSize = pointRadius * 2;
-      var pointX = cropRectangleX + pointRadius;
-      var pointY = cropRectangleY + pointRadius;
 
-      var drawPoint = function(ctx, x, y, radius, startAngle, endAngle, clockwise) {
+      var pointRadius = this._ctx.lineWidth;
+      var ctx = this._ctx;
+
+      var drawPoint = function(x, y) {
         ctx.beginPath();
-        ctx.arc(x, y, radius, startAngle, endAngle, clockwise);
+        ctx.arc(x, y, pointRadius, 0, 360, false);
         ctx.fill();
       };
 
-      for (var i = 0; i < cropRectangleSide / 2; i + pointSize) {
-        for (var j = 0; j < cropRectangleSide / 2; j + pointSize) {
-          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
-          pointX += pointSize * 2;
+      var drawDottedLine = function(startX, startY, side, horizontal) {
+        var DottedLineStart = horizontal ? startX : startY;
+        for(var i = DottedLineStart; i < DottedLineStart + side; i += pointRadius * 4) {
+          if (horizontal) {
+            drawPoint(i, startY);
+          } else {
+            drawPoint(startX, i);
+          }
         }
-        drawPoint(this._ctx, pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
-        pointY += pointSize * 2;
-      }
+      };
 
-      pointX = cropRectangleX + pointRadius;
-      pointY = cropRectangleY + pointRadius;
+      var drawDottedSquare = function(x, y, side) {
+        drawDottedLine(x + pointRadius, y + pointRadius, side, true);
+        drawDottedLine(x + pointRadius, y + side - pointRadius / 2, side, true);
+        drawDottedLine(x + pointRadius, y + pointRadius, side, false);
+        drawDottedLine(x + side - pointRadius / 2, y + pointRadius, side, false);
+      };
 
-      for (var c = 0; c < cropRectangleSide / 2; c + pointSize) {
-        for (var k = 0; k < cropRectangleSide / 2; k + pointSize) {
-          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
-          pointY += pointSize * 2;
-        }
-        drawPoint(this._ctx, pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
-        pointX += pointSize * 2;
-      }
+      drawDottedSquare(cropRectangleX, cropRectangleY, cropRectangleSide);
 
 
       var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
