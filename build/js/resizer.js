@@ -92,11 +92,6 @@
       this._ctx.lineWidth = 3;
       // Цвет обводки.
       this._ctx.fillStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      //this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      //this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -128,8 +123,8 @@
       };
 
       var drawDottedLine = function(startX, startY, side, horizontal) {
-        var DottedLineStart = horizontal ? startX : startY;
-        for(var i = DottedLineStart; i < DottedLineStart + side; i += pointRadius * 4) {
+        var dottedLineStart = horizontal ? startX : startY;
+        for(var i = dottedLineStart; i < dottedLineStart + side; i += pointRadius * 4) {
           if (horizontal) {
             drawPoint(i, startY);
           } else {
