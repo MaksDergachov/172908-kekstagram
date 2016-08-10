@@ -119,33 +119,43 @@
 
       var pointRadius = this._ctx.lineWidth;
       var pointSize = pointRadius * 2;
+      var counterX = 0;
+      var counterY = 0;
       var pointX = cropRectangleX + pointRadius;
       var pointY = cropRectangleY + pointRadius;
 
-      var drawPoint = function(ctx, x, y, radius, startAngle, endAngle, clockwise) {
-        ctx.beginPath();
-        ctx.arc(x, y, radius, startAngle, endAngle, clockwise);
-        ctx.fill();
-      };
-
-      for (var i = 0; i < cropRectangleSide / 2; i + pointSize) {
-        for (var j = 0; j < cropRectangleSide / 2; j + pointSize) {
-          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
+      while (counterY < cropRectangleSide / 2) {
+        while (counterX < cropRectangleSide / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
+          this._ctx.fill();
+          counterX += pointSize;
           pointX += pointSize * 2;
         }
-        drawPoint(this._ctx, pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
+        this._ctx.beginPath();
+        this._ctx.arc(pointX - pointSize * 2, pointY, pointRadius, 0, 360, false);
+        this._ctx.fill();
+        counterY += pointSize;
         pointY += pointSize * 2;
       }
 
+      counterX = 0;
+      counterY = 0;
       pointX = cropRectangleX + pointRadius;
       pointY = cropRectangleY + pointRadius;
 
-      for (var c = 0; c < cropRectangleSide / 2; c + pointSize) {
-        for (var k = 0; k < cropRectangleSide / 2; k + pointSize) {
-          drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
+      while (counterX < cropRectangleSide / 2) {
+        while (counterY < cropRectangleSide / 2) {
+          this._ctx.beginPath();
+          this._ctx.arc(pointX, pointY, pointRadius, 0, 360, false);
+          this._ctx.fill();
+          counterY += pointSize;
           pointY += pointSize * 2;
         }
-        drawPoint(this._ctx, pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
+        this._ctx.beginPath();
+        this._ctx.arc(pointX, pointY - pointSize * 2, pointRadius, 0, 360, false);
+        this._ctx.fill();
+        counterX += pointSize;
         pointX += pointSize * 2;
       }
 
