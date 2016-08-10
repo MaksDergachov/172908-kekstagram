@@ -122,6 +122,12 @@
       var pointX = cropRectangleX + pointRadius;
       var pointY = cropRectangleY + pointRadius;
 
+      var drawPoint = function(ctx, x, y, radius, startAngle, endAngle, clockwise) {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, startAngle, endAngle, clockwise);
+        ctx.fill();
+      };
+
       for (var i = 0; i < cropRectangleSide / 2; i + pointSize) {
         for (var j = 0; j < cropRectangleSide / 2; j + pointSize) {
           drawPoint(this._ctx, pointX, pointY, pointRadius, 0, 360, false);
@@ -143,11 +149,6 @@
         pointX += pointSize * 2;
       }
 
-      var drawPoint = function(ctx, x, y, radius, startAngle, endAngle, clockwise) {
-        ctx.beginPath();
-        ctx.arc(x, y, radius, startAngle, endAngle, clockwise);
-        ctx.fill();
-      };
 
       var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
       var transparentSquareY = cropRectangleY - this._ctx.lineWidth / 2;
