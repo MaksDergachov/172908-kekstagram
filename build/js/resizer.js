@@ -89,14 +89,9 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 3;
       // Цвет обводки.
-      this._ctx.strokeStyle = '#ffe753';
-      // Размер штрихов. Первый элемент массива задает длину штриха, второй
-      // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
-      // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
+      this._ctx.fillStyle = '#ffe753';
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -117,15 +112,40 @@
       var cropRectangleY = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
       var cropRectangleSide = this._resizeConstraint.side - this._ctx.lineWidth / 2;
 
-      this._ctx.strokeRect(
-          cropRectangleX,
-          cropRectangleY,
-          cropRectangleSide,
-          cropRectangleSide);
+
+      var pointRadius = this._ctx.lineWidth;
+      var ctx = this._ctx;
+
+      var drawPoint = function(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, pointRadius, 0, 360, false);
+        ctx.fill();
+      };
+
+      var drawDottedLine = function(startX, startY, side, horizontal) {
+        var dottedLineStart = horizontal ? startX : startY;
+        for(var i = dottedLineStart; i < dottedLineStart + side; i += pointRadius * 4) {
+          if (horizontal) {
+            drawPoint(i, startY);
+          } else {
+            drawPoint(startX, i);
+          }
+        }
+      };
+
+      var drawDottedSquare = function(x, y, side) {
+        drawDottedLine(x + pointRadius, y + pointRadius, side, true);
+        drawDottedLine(x + pointRadius, y + side - pointRadius / 2, side, true);
+        drawDottedLine(x + pointRadius, y + pointRadius, side, false);
+        drawDottedLine(x + side - pointRadius / 2, y + pointRadius, side, false);
+      };
+
+      drawDottedSquare(cropRectangleX, cropRectangleY, cropRectangleSide);
+
 
       var transparentSquareX = cropRectangleX - this._ctx.lineWidth / 2;
       var transparentSquareY = cropRectangleY - this._ctx.lineWidth / 2;
-      var transparentSquareSide = (this._resizeConstraint.side - this._ctx.lineWidth / 2) / 2;
+      var transparentSquareSide = cropRectangleSide / 2;
 
       this._ctx.beginPath();
       this._ctx.moveTo(transparentSquareX, transparentSquareY);
