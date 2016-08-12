@@ -263,4 +263,32 @@
 
   cleanupResizer();
   updateBackground();
+
+  // Валидация формы кадрирования изображения.
+
+  var resizeFields = document.querySelectorAll('.upload-resize-controls > input');
+  var resizeX = document.querySelector('#resize-x');
+  var resizeY = document.querySelector('#resize-y');
+  var resizeSide = document.querySelector('#resize-size');
+  var resizeSubmit = document.querySelector('#resize-fwd');
+
+  var validateResizeFields = function() {
+    if ((+resizeX.value + +resizeSide.value) > currentResizer._image.naturalWidth
+    || (+resizeY.value + +resizeSide.value) > currentResizer._image.naturalHeight
+    || resizeX.value < 0 || resizeY.value < 0) {
+      resizeSubmit.setAttribute('disabled', '');
+    } else {
+      resizeSubmit.removeAttribute('disabled');
+    }
+  };
+
+  resizeX.value = 0;
+  resizeY.value = 0;
+
+  for (var j = resizeFields.length - 1; j >= 0; j--) {
+    resizeFields[j].addEventListener('input', function() {
+      validateResizeFields();
+    } );
+  }
+
 })();
